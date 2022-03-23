@@ -10,7 +10,5 @@ public interface RoleDao {
     Role getById(Long id);
     Role getRoleByName(String rolename);
     Role createRoleIfNotFound(String name, long id);
-
-    //23.03 внесение изменений согласно замечаниям
     List<Role> getAllRoles();
 }

@@ -43,7 +43,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    //23.03 в принятом варианте нет этих методов!
+    //23.03 отсут!
     @PatchMapping()
     public String updateUser(@Valid @ModelAttribute("user") Long id) {
         userService.getById(id);
@@ -63,7 +63,6 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("adminEditUser");
         modelAndView.addObject("user", user);
-        // 23. 03 внесение изменений согласно замечаниям
         modelAndView.addObject("rolelist", roleDao.getAllRoles());
         return modelAndView;
     }
@@ -73,7 +72,6 @@ public class AdminController {
             @ModelAttribute("password") String password, @ModelAttribute("lastname") String lastname,
             @ModelAttribute("age") byte age, @RequestParam("roles") String[] roles, String login) {
 
-        // 23. 03 внесение изменений согласно замечаниям
         userService.implEditUser(id, name, lastname, age, password, roles, login);
         return "redirect:/admin";
     }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -30,25 +31,30 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(User user) {
-        User managed = entityManager.merge(user);
-        entityManager.remove(managed);
-    }
-
-    @Override
     public User getById(Long id) {
+
+        /*
+        Так - т.е. без SQL-запроса - полностью корректно работает редактирование!!!
+         */
         return entityManager.find(User.class, id );
+
     }
 
     @Override
     public User getUserByLogin(String login) {
+
         try {
-            User user = entityManager.createQuery("SELECT u FROM User u where u.login = :login", User.class)
-                    .setParameter("login", login)
-                    .getSingleResult();
-            return user;
+            Query query = entityManager.createQuery("select u from User u join fetch u.roles where u.login = :login");
+            query.setParameter("login", login);
+            return (User) query.getSingleResult();
         } catch (NoResultException ex) {
             return null;
         }
+    }
+
+    @Override
+    public void delete(User user) {
+        User managed = entityManager.merge(user);
+        entityManager.remove(managed);
     }
 }
